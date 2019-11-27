@@ -1,19 +1,22 @@
+from .BadRequestError import BadRequestError
+
 COLUMN_COUNT = 7
 ROW_COUNT = 6
 
 def validate_board(board):
-    if not check_board_length(board) or not check_number_of_pieces(board) or check_disconnected_pieces(board):
-        return False
-    return True
+    if not check_board_length(board):
+        raise BadRequestError('Gameboard size must be 6 by 7.')
+    if check_disconnected_pieces(board):
+        raise BadRequestError('Pieces cannot be disconnected.')
+    if not check_number_of_pieces(board):
+        raise BadRequestError('Player has incorrect number of pieces on the board.')
 
 def check_board_length(board):
-    message = 'Not a standard gameboard size.'
     if len(board) != 6 or len(board[0]) != 7:
         return False
     return True
 
 def check_number_of_pieces(board):
-    message = 'Incorrect number of pieces on the board'
     player1Count = 0
     player2Count = 0
     for c in range(COLUMN_COUNT):
@@ -41,7 +44,7 @@ def winning_move(board, piece):
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT):
             if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
-                eturn True
+                return True
 
     # Check vertical
     for c in range(COLUMN_COUNT):
