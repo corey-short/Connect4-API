@@ -8,8 +8,7 @@ main = Blueprint('main', __name__)
 def evaluate_board_state():
     boardstate_data = request.get_json()
 
-    if validate_board(boardstate_data['board']) is False:
-        return abort(400,'Not a standard gameboard size.')
+    validate_board(boardstate_data['board'])
 
     if winning_move(boardstate_data['board'], 1):
         return 'Player 1 wins!', 200
